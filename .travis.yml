@@ -59,12 +59,12 @@ jobs:
           tags: true
           condition: ${TRAVIS_TAG} =~ ^[0-9]+\.[0-9]+\.[0-9]+$
 
-
    - name: building ppc64le image
      arch: ppc64le
-    script:
+     script:
       # Audit npm packages. Fail build whan a PR audit fails, otherwise report the vulnerability and proceed.
       - if [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then npm audit; else npm audit || true; fi
+      - npm run lint
       - npm test
       - docker build --rm -t "quay.io/razee/watch-keeper:${TRAVIS_COMMIT}" .
       - if [ -n "${TRAVIS_TAG}" ]; then docker tag quay.io/razee/watch-keeper:${TRAVIS_COMMIT} quay.io/razee/watch-keeper:${TRAVIS_TAG}; fi
@@ -108,4 +108,4 @@ jobs:
         skip_cleanup: true
         on:
           tags: true
-          condition: ${TRAVIS_TAG} =~ ^[0-9]+\.[0-9]+\.[0-9]+$
+          condition: ${TRAVIS_TAG} =~ ^[0-9]+\.[0-9]+\.[0-9]+$     
