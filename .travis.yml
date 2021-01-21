@@ -17,8 +17,8 @@ jobs:
        - npm run lint
        - npm test
        - if [[ "${TRAVIS_TAG}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then npm version --no-git-tag-version "${TRAVIS_TAG}"; fi
-       - docker build --rm -t "quay.io/razee/watch-keeper:${TRAVIS_COMMIT}-amd64" .
-       - if [ -n "${TRAVIS_TAG}" ]; then docker tag quay.io/razee/watch-keeper:${TRAVIS_COMMIT}-amd64 quay.io/razee/watch-keeper:${TRAVIS_TAG}-amd64; fi
+       - docker build --rm -t "quay.io/siddhesh_ghadi/watch-keeper:${TRAVIS_COMMIT}-amd64" .
+       - if [ -n "${TRAVIS_TAG}" ]; then docker tag quay.io/siddhesh_ghadi/watch-keeper:${TRAVIS_COMMIT}-amd64 quay.io/siddhesh_ghadi/watch-keeper:${TRAVIS_TAG}-amd64; fi
        - docker images
        - ./build/process-template.sh kubernetes/watch-keeper/resource.yaml >/tmp/resource.yaml
        - ./build/process-template.sh kubernetes/watch-keeper/rbac.yaml >/tmp/rbac.yaml
@@ -29,7 +29,7 @@ jobs:
      deploy:
        # Deploy alpha builds
        - provider: script
-         script: docker push "quay.io/razee/watch-keeper:${TRAVIS_TAG}-amd64"
+         script: docker push "quay.io/siddhesh_ghadi/watch-keeper:${TRAVIS_TAG}-amd64"
          skip_cleanup: true
          on:
            tags: true
@@ -37,7 +37,7 @@ jobs:
 
        # Deploy released builds
        - provider: script
-         script: docker push "quay.io/razee/watch-keeper:${TRAVIS_TAG}-amd64"
+         script: docker push "quay.io/siddhesh_ghadi/watch-keeper:${TRAVIS_TAG}-amd64"
          skip_cleanup: true
          on:
            tags: true
@@ -50,8 +50,8 @@ jobs:
        - if [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then npm audit; else npm audit || true; fi
        - npm test
        - if [[ "${TRAVIS_TAG}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then npm version --no-git-tag-version "${TRAVIS_TAG}"; fi
-       - docker build --rm -t "quay.io/razee/watch-keeper:${TRAVIS_COMMIT}-ppc64le" .
-       - if [ -n "${TRAVIS_TAG}" ]; then docker tag quay.io/razee/watch-keeper:${TRAVIS_COMMIT}-ppc64le quay.io/razee/watch-keeper:${TRAVIS_TAG}-ppc64le; fi
+       - docker build --rm -t "quay.io/siddhesh_ghadi/watch-keeper:${TRAVIS_COMMIT}-ppc64le" .
+       - if [ -n "${TRAVIS_TAG}" ]; then docker tag quay.io/siddhesh_ghadi/watch-keeper:${TRAVIS_COMMIT}-ppc64le quay.io/siddhesh_ghadi/watch-keeper:${TRAVIS_TAG}-ppc64le; fi
        - docker images
        - ./build/process-template.sh kubernetes/watch-keeper/resource.yaml >/tmp/resource.yaml
        - ./build/process-template.sh kubernetes/watch-keeper/rbac.yaml >/tmp/rbac.yaml
@@ -62,7 +62,7 @@ jobs:
      deploy:
        # Deploy alpha builds
        - provider: script
-         script: docker push "quay.io/razee/watch-keeper:${TRAVIS_TAG}-ppc64le"
+         script: docker push "quay.io/siddhesh_ghadi/watch-keeper:${TRAVIS_TAG}-ppc64le"
          skip_cleanup: true
          on:
            tags: true
@@ -70,7 +70,7 @@ jobs:
 
        # Deploy released builds
        - provider: script
-         script: docker push "quay.io/razee/watch-keeper:${TRAVIS_TAG}-ppc64le"
+         script: docker push "quay.io/siddhesh_ghadi/watch-keeper:${TRAVIS_TAG}-ppc64le"
          skip_cleanup: true
          on:
            tags: true
@@ -84,7 +84,7 @@ jobs:
        - ./build/process-template.sh kubernetes/watch-keeper/rbac.yaml >/tmp/rbac.yaml
        - export DOCKER_CLI_EXPERIMENTAL=enabled 
        - sudo chown -R $USER:$USER /etc/docker/ 
-       - if [ -n "${TRAVIS_TAG}" ]; then docker manifest create quay.io/razee/watch-keeper:${TRAVIS_TAG} quay.io/razee/watch-keeper:${TRAVIS_TAG}-amd64 quay.io/razee/watch-keeper:${TRAVIS_TAG}-ppc64le; fi
+       - if [ -n "${TRAVIS_TAG}" ]; then docker manifest create quay.io/siddhesh_ghadi/watch-keeper:${TRAVIS_TAG} quay.io/siddhesh_ghadi/watch-keeper:${TRAVIS_TAG}-amd64 quay.io/siddhesh_ghadi/watch-keeper:${TRAVIS_TAG}-ppc64le; fi
        
      before_deploy:
        - docker login -u="${QUAY_ID}" -p="${QUAY_TOKEN}" quay.io
@@ -92,7 +92,7 @@ jobs:
      deploy:
        # Deploy alpha builds
        - provider: script
-         script: docker manifest push "quay.io/razee/watch-keeper:${TRAVIS_TAG}"
+         script: docker manifest push "quay.io/siddhesh_ghadi/watch-keeper:${TRAVIS_TAG}"
          skip_cleanup: true
          on:
            tags: true
@@ -100,7 +100,7 @@ jobs:
      
        # Deploy released builds
        - provider: script
-         script: docker manifest push "quay.io/razee/watch-keeper:${TRAVIS_TAG}"
+         script: docker manifest push "quay.io/siddhesh_ghadi/watch-keeper:${TRAVIS_TAG}"
          skip_cleanup: true
          on:
            tags: true
