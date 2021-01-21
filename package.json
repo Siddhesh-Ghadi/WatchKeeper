@@ -1,5 +1,5 @@
 {
-  "name": "@razee/watchkeeper",
+  "name": "@siddhesh_ghadi/watchkeeper",
   "version": "0.0.0-dev",
   "description": "Observe Kubernetes changes",
   "main": "./src/index.js",
