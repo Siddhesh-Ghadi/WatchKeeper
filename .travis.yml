@@ -16,12 +16,12 @@ jobs:
        - if [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then npm audit; else npm audit || true; fi
        - npm run lint
        - npm test
-       - docker build --rm -t "quay.io/razee/watch-keeper:${TRAVIS_COMMIT}" .
-       - if [ -n "${TRAVIS_TAG}" ]; then docker tag quay.io/razee/watch-keeper:${TRAVIS_COMMIT} quay.io/razee/watch-keeper:${TRAVIS_TAG}; fi
+       - if [[ "${TRAVIS_TAG}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then npm version --no-git-tag-version "${TRAVIS_TAG}"; fi
+       - docker build --rm -t "quay.io/razee/watch-keeper:${TRAVIS_COMMIT}-amd64" .
+       - if [ -n "${TRAVIS_TAG}" ]; then docker tag quay.io/razee/watch-keeper:${TRAVIS_COMMIT}-amd64 quay.io/razee/watch-keeper:${TRAVIS_TAG}-amd64; fi
        - docker images
        - ./build/process-template.sh kubernetes/watch-keeper/resource.yaml >/tmp/resource.yaml
        - ./build/process-template.sh kubernetes/watch-keeper/rbac.yaml >/tmp/rbac.yaml
-       - if [[ "${TRAVIS_TAG}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then npm version --no-git-tag-version "${TRAVIS_TAG}"; fi
 
    - name: building ppc64le image
      arch: ppc64le
@@ -29,12 +29,12 @@ jobs:
        # Audit npm packages. Fail build whan a PR audit fails, otherwise report the vulnerability and proceed.
        - if [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then npm audit; else npm audit || true; fi
        - npm test
-       - docker build --rm -t "quay.io/razee/watch-keeper:${TRAVIS_COMMIT}" .
-       - if [ -n "${TRAVIS_TAG}" ]; then docker tag quay.io/razee/watch-keeper:${TRAVIS_COMMIT} quay.io/razee/watch-keeper:${TRAVIS_TAG}; fi
+       - if [[ "${TRAVIS_TAG}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then npm version --no-git-tag-version "${TRAVIS_TAG}"; fi
+       - docker build --rm -t "quay.io/razee/watch-keeper:${TRAVIS_COMMIT}-ppc64le" .
+       - if [ -n "${TRAVIS_TAG}" ]; then docker tag quay.io/razee/watch-keeper:${TRAVIS_COMMIT}-ppc64le quay.io/razee/watch-keeper:${TRAVIS_TAG}-ppc64le; fi
        - docker images
        - ./build/process-template.sh kubernetes/watch-keeper/resource.yaml >/tmp/resource.yaml
        - ./build/process-template.sh kubernetes/watch-keeper/rbac.yaml >/tmp/rbac.yaml
-       - if [[ "${TRAVIS_TAG}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then npm version --no-git-tag-version "${TRAVIS_TAG}"; fi
        
 before_deploy:
   - docker login -u="${QUAY_ID}" -p="${QUAY_TOKEN}" quay.io
